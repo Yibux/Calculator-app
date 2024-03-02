@@ -26,7 +26,7 @@
 
         <Button
             style="@style/functionalButton"
-            android:onClick="changeNumberValue"
+            android:onClick="changeNumberSymbol"
             android:text="+/-" />
     </LinearLayout>
 

@@ -5,56 +5,104 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/graphite"
+    android:orientation="vertical"
     tools:context=".SimpleCalculator">
 
     <TextView
         style="@style/output"
-        android:text="output"
-        />
+        android:id="@+id/outputView"/>
 
     <LinearLayout style="@style/buttonRow">
-        <Button style="@style/singleButton" android:text="Bcksp"/>
-        <Button style="@style/singleButton" android:text="C"/>
-        <Button style="@style/singleButton" android:text="+/-"/>
+        <Button
+            style="@style/functionalButton"
+            android:text="Bcksp" />
+
+        <Button
+            style="@style/functionalButton"
+            android:text="C" />
+
+        <Button
+            style="@style/functionalButton"
+            android:text="+/-" />
     </LinearLayout>
 
     <LinearLayout style="@style/buttonRow">
-        <Button style="@style/singleButton" android:text="7"/>
-        <Button style="@style/singleButton" android:text="8"/>
-        <Button style="@style/singleButton" android:text="9"/>
-        <Button style="@style/singleButton" android:text="/"/>
+
+        <Button
+            style="@style/numberButton"
+            android:text="7" />
+
+        <Button
+            style="@style/numberButton"
+            android:text="8" />
+
+        <Button
+            style="@style/numberButton"
+            android:text="9" />
+
+        <Button
+            style="@style/functionalButton"
+            android:text="/" />
     </LinearLayout>
 
     <LinearLayout style="@style/buttonRow">
-        <Button style="@style/singleButton" android:text="4"/>
-        <Button style="@style/singleButton" android:text="5"/>
-        <Button style="@style/singleButton" android:text="6"/>
-        <Button style="@style/singleButton" android:text="*"/>
+
+        <Button
+            style="@style/numberButton"
+            android:text="4" />
+
+        <Button
+            style="@style/numberButton"
+            android:text="5" />
+
+        <Button
+            style="@style/numberButton"
+            android:text="6" />
+
+        <Button
+            style="@style/functionalButton"
+            android:text="*" />
     </LinearLayout>
 
     <LinearLayout style="@style/buttonRow">
-        <Button style="@style/singleButton"
-            android:text="1"
-            />
-        <Button style="@style/singleButton"
-            android:text="2"
-            />
-        <Button style="@style/singleButton"
-            android:text="3"
-            />
-        <Button style="@style/singleButton" android:text="-"/>
+
+        <Button
+            style="@style/numberButton"
+            android:text="1" />
+
+        <Button
+            style="@style/numberButton"
+            android:text="2" />
+
+        <Button
+            style="@style/numberButton"
+            android:text="3" />
+
+        <Button
+            style="@style/functionalButton"
+            android:text="-" />
     </LinearLayout>
 
     <LinearLayout style="@style/buttonRow">
-        <Button style="@style/singleButton" android:text="0" />
-        <Button style="@style/singleButton" android:text="."/>
-        <Button style="@style/singleButton" android:text="="/>
-        <Button style="@style/singleButton" android:text="+"/>
+
+        <Button
+            style="@style/numberButton"
+            android:text="0" />
+
+        <Button
+            style="@style/functionalButton"
+            android:text="." />
+
+        <Button
+            style="@style/functionalButton"
+            android:text="="
+            android:onClick="equalsAction"/>
+
+        <Button
+            style="@style/functionalButton"
+            android:text="+" />
     </LinearLayout>
-
-
 
 
 </LinearLayout>

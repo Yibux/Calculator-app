@@ -1,6 +1,9 @@
 package com.example.calculator
 
 import android.os.Bundle
+import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
@@ -16,5 +19,12 @@ class SimpleCalculator : ComponentActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+    }
+
+    fun equalsAction(view: View) {}
+
+    fun insertNumberAction(view: View) {
+        if (view is Button)
+            findViewById<TextView>(R.id.outputView).append(view.text)
     }
 }

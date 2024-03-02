@@ -27,4 +27,8 @@ class SimpleCalculator : ComponentActivity() {
         if (view is Button)
             findViewById<TextView>(R.id.outputView).append(view.text)
     }
+
+    fun deleteLastValue(view: View) {}
+    fun clearAllOperations(view: View) {}
+    fun changeNumberValue(view: View) {}
 }

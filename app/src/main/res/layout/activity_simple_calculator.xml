@@ -16,14 +16,17 @@
     <LinearLayout style="@style/buttonRow">
         <Button
             style="@style/functionalButton"
-            android:text="Bcksp" />
+            android:onClick="deleteLastValue"
+            android:text="⌫" />
 
         <Button
             style="@style/functionalButton"
+            android:onClick="clearAllOperations"
             android:text="C" />
 
         <Button
             style="@style/functionalButton"
+            android:onClick="changeNumberValue"
             android:text="+/-" />
     </LinearLayout>
 
@@ -91,7 +94,7 @@
             android:text="0" />
 
         <Button
-            style="@style/functionalButton"
+            style="@style/numberButton"
             android:text="." />
 
         <Button

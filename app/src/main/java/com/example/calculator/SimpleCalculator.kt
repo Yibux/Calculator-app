@@ -1,5 +1,6 @@
 package com.example.calculator
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -13,6 +14,12 @@ import com.example.calculator.R.id.outputView
 class SimpleCalculator : ComponentActivity() {
     private var isNumberMinus = false
     private var isAnyNumber = false
+    private var takenOperation = ""
+    private var isFirstNumberSelected = false
+    private var isSecondNumberSelected = false
+    private var firstNumber : Double = 0.0
+    private var secondNumber : Double = 0.0
+    private var output : Double = 0.0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -24,11 +31,55 @@ class SimpleCalculator : ComponentActivity() {
         }
     }
 
-    fun equalsAction(view: View) {}
+    fun equalsAction(view: View) {
+        if(isAnyNumber) {
+            val numberString = findViewById<TextView>(outputView).text.toString()
+
+            secondNumber = if(numberString.endsWith("."))
+                extractNumberFromString(numberString + "0")
+            else
+                extractNumberFromString(numberString)
+
+            isSecondNumberSelected = true
+        }
+
+
+        if(isFirstNumberSelected && isSecondNumberSelected) {
+            when(takenOperation) {
+                "+" -> output = firstNumber + secondNumber
+                "-" -> output = firstNumber - secondNumber
+                "*" -> output = firstNumber * secondNumber
+                "/" -> {
+                    if(secondNumber.equals(0.0)) {
+                        findViewById<TextView>(outputView).text = "Error"
+                        isFirstNumberSelected = false
+                        isSecondNumberSelected = false
+                        return
+                    }
+                    output = firstNumber / secondNumber
+                }
+            }
+            findViewById<TextView>(outputView).text = output.toString()
+            isAnyNumber = false
+        }
+    }
 
     fun insertNumberAction(view: View) {
         if (view is Button)
         {
+            if(!isAnyNumber) {
+                findViewById<TextView>(outputView).text = ""
+            }
+
+
+            if (view.text.equals(".") && findViewById<TextView>(outputView).text.isEmpty()) {
+                findViewById<TextView>(outputView).append("0")
+            }
+
+            if(view.text.equals(".") &&
+                findViewById<TextView>(outputView).text.count { it == '.' } == 1)
+                return
+
             findViewById<TextView>(outputView).append(view.text)
             isAnyNumber = true
         }
@@ -47,7 +98,6 @@ class SimpleCalculator : ComponentActivity() {
 
         }
 
-
         if (textLength == 0)
             isAnyNumber = false
     }
@@ -55,6 +105,7 @@ class SimpleCalculator : ComponentActivity() {
         findViewById<TextView>(outputView).text = ""
         isAnyNumber = false
         isNumberMinus = false
+        isFirstNumberSelected = false
     }
     fun changeNumberSymbol(view: View) {
         val textToEdit = findViewById<TextView>(outputView).text
@@ -69,8 +120,30 @@ class SimpleCalculator : ComponentActivity() {
                 isNumberMinus = true
             }
         }
-
-
-
     }
+
+    fun takeOperation(view: View) {
+        if (view is Button) {
+            takenOperation = view.text.toString()
+            val numberString = findViewById<TextView>(outputView).text.toString()
+
+            firstNumber = if(numberString.endsWith("."))
+                extractNumberFromString(numberString + "0")
+            else
+                extractNumberFromString(numberString)
+
+            isFirstNumberSelected = true
+            isAnyNumber = false
+        }
+    }
+
+    private fun extractNumberFromString(numberString : String) : Double {
+        return if (numberString.startsWith("-")) {
+            numberString.substring(1).toDouble() * (-1)
+        } else {
+            numberString.toDouble()
+        }
+    }
+
+
 }

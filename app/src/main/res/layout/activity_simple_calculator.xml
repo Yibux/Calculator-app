@@ -46,6 +46,7 @@
 
         <Button
             style="@style/functionalButton"
+            android:onClick="takeOperation"
             android:text="/" />
     </LinearLayout>
 
@@ -65,6 +66,7 @@
 
         <Button
             style="@style/functionalButton"
+            android:onClick="takeOperation"
             android:text="*" />
     </LinearLayout>
 
@@ -84,6 +86,7 @@
 
         <Button
             style="@style/functionalButton"
+            android:onClick="takeOperation"
             android:text="-" />
     </LinearLayout>
 
@@ -104,6 +107,7 @@
 
         <Button
             style="@style/functionalButton"
+            android:onClick="takeOperation"
             android:text="+" />
     </LinearLayout>
 

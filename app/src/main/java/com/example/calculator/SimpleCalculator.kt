@@ -71,7 +71,6 @@ class SimpleCalculator : ComponentActivity() {
                 findViewById<TextView>(outputView).text = ""
             }
 
-
             if (view.text.equals(".") && findViewById<TextView>(outputView).text.isEmpty()) {
                 findViewById<TextView>(outputView).append("0")
             }
@@ -124,6 +123,9 @@ class SimpleCalculator : ComponentActivity() {
 
     fun takeOperation(view: View) {
         if (view is Button) {
+            if(isFirstNumberSelected && isAnyNumber) {
+                equalsAction(view)
+            }
             takenOperation = view.text.toString()
             val numberString = findViewById<TextView>(outputView).text.toString()
 
@@ -138,6 +140,7 @@ class SimpleCalculator : ComponentActivity() {
     }
 
     private fun extractNumberFromString(numberString : String) : Double {
+        isNumberMinus = false
         return if (numberString.startsWith("-")) {
             numberString.substring(1).toDouble() * (-1)
         } else {

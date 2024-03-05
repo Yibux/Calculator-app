@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
+import com.example.calculator.ui.theme.ScientificCalculator
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,6 +15,11 @@ class MainActivity : ComponentActivity() {
         val simpleCalculatorButton = findViewById<Button>(R.id.SimpleCalculatorButton)
         simpleCalculatorButton.setOnClickListener {
             startActivity(Intent(this, SimpleCalculator::class.java))
+        }
+
+        val advancedCalculatorButton = findViewById<Button>(R.id.AdvancedCalculatorButton)
+        advancedCalculatorButton.setOnClickListener {
+            startActivity(Intent(this, ScientificCalculator::class.java))
         }
 
     }

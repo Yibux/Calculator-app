@@ -1,6 +1,7 @@
-package com.example.calculator.ui.theme
+package com.example.calculator
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -8,8 +9,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.calculator.R
-import java.lang.Math.log
 import java.lang.Math.pow
 import kotlin.math.cos
 import kotlin.math.ln
@@ -21,6 +20,7 @@ import kotlin.math.tan
 
 class ScientificCalculator : AppCompatActivity() {
 
+    private var clearLine = false
     private var isNumberMinus = false
     private var isAnyNumber = false
     private var takenOperation = ""
@@ -32,16 +32,19 @@ class ScientificCalculator : AppCompatActivity() {
     private var cleanerCounter = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_scientific_calculator)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        Log.d("ScientificCalculator", "onCreate called")
+        try {
+            setContentView(R.layout.activity_scientific_calculator)
+        } catch (e: Exception) {
+            Log.e("ScientificCalculator", "Exception in onCreate", e)
         }
     }
 
     fun equalsAction(view: View) {
+
+        if(calculateScientificActions(takenOperation))
+            return
+
         if(isAnyNumber) {
             val numberString = findViewById<TextView>(R.id.outputView).text.toString()
 
@@ -70,6 +73,7 @@ class ScientificCalculator : AppCompatActivity() {
                 }
                 "log" -> output = log(firstNumber, secondNumber)
                 "x^y" -> output = pow(firstNumber, secondNumber)
+                else -> return
             }
             findViewById<TextView>(R.id.outputView).text = output.toString()
             isAnyNumber = false
@@ -80,8 +84,9 @@ class ScientificCalculator : AppCompatActivity() {
     fun insertNumberAction(view: View) {
         if (view is Button)
         {
-            if(!isAnyNumber) {
+            if(clearLine) {
                 findViewById<TextView>(R.id.outputView).text = ""
+                isAnyNumber = false
             }
 
             if (view.text.equals(".") && findViewById<TextView>(R.id.outputView).text.isEmpty()) {
@@ -142,14 +147,11 @@ class ScientificCalculator : AppCompatActivity() {
     }
 
     fun takeOperation(view: View) {
-        if (view is Button) {
-            if(isAnyNumber)
-                calculateScientificActions(view.text.toString())
+        if (view is Button && isAnyNumber) {
 
-            if(isFirstNumberSelected && isAnyNumber) {
-                equalsAction(view)
-            }
             takenOperation = view.text.toString()
+            equalsAction(view)
+
             val numberString = findViewById<TextView>(R.id.outputView).text.toString()
 
             firstNumber = if(numberString.endsWith("."))
@@ -158,11 +160,11 @@ class ScientificCalculator : AppCompatActivity() {
                 extractNumberFromString(numberString)
 
             isFirstNumberSelected = true
-            isAnyNumber = false
+            clearLine = true
         }
     }
 
-    private fun calculateScientificActions(text : String) {
+    private fun calculateScientificActions(text : String) : Boolean {
         when(text) {
             "sin" -> output = sin(extractNumberFromString(findViewById<TextView>(R.id.outputView).text.toString()))
             "cos" -> output = cos(extractNumberFromString(findViewById<TextView>(R.id.outputView).text.toString()))
@@ -173,9 +175,10 @@ class ScientificCalculator : AppCompatActivity() {
                 extractNumberFromString(findViewById<TextView>(R.id.outputView).text.toString()).pow(
                     2
                 )
-            else -> return
+            else -> return false
         }
         findViewById<TextView>(R.id.outputView).text = output.toString()
+        return true
     }
 
     private fun extractNumberFromString(numberString : String) : Double {

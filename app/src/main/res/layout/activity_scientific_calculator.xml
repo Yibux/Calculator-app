@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/graphite"
     android:orientation="vertical"
-    tools:context=".ui.theme.ScientificCalculator">
+    tools:context=".ScientificCalculator">
 
     <TextView
         style="@style/output"

@@ -12,12 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Calculator"
         tools:targetApi="31">
-        <activity
-            android:name=".ui.theme.ScientificCalculator"
-            android:exported="false" />
-        <activity
-            android:name=".SimpleCalculator"
-            android:exported="false" />
+        <activity android:name=".ScientificCalculator"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
         <activity
             android:name=".SimpleCalculator"
             android:exported="false" />

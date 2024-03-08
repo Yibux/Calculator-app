@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -42,10 +43,16 @@ class ScientificCalculator : AppCompatActivity() {
 
     fun equalsAction(view: View) {
 
+        val outputView = findViewById<TextView>(R.id.outputView)
+        if (outputView.text.isEmpty()) {
+            Toast.makeText(this, "Illegal operation", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         if(calculateScientificActions(takenOperation))
             return
 
-        if(isAnyNumber) {
+        if(isAnyNumber && !clearLine) {
             val numberString = findViewById<TextView>(R.id.outputView).text.toString()
 
             secondNumber = if(numberString.endsWith("."))
@@ -76,8 +83,12 @@ class ScientificCalculator : AppCompatActivity() {
                 else -> return
             }
             findViewById<TextView>(R.id.outputView).text = output.toString()
-            isAnyNumber = false
+//            isAnyNumber = false
+            clearLine = true
             isNumberMinus = false
+            isSecondNumberSelected = false
+        } else {
+            Toast.makeText(this, "Insert second number", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -87,6 +98,7 @@ class ScientificCalculator : AppCompatActivity() {
             if(clearLine) {
                 findViewById<TextView>(R.id.outputView).text = ""
                 isAnyNumber = false
+                clearLine = false
             }
 
             if (view.text.equals(".") && findViewById<TextView>(R.id.outputView).text.isEmpty()) {

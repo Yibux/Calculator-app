@@ -135,6 +135,7 @@ class ScientificCalculator : AppCompatActivity() {
         if (cleanerCounter == 0)
         {
             findViewById<TextView>(R.id.outputView).text = ""
+            //todo: check if it's necessary, fix this issue - after clicking C, the first number is erased (but shouldnt)
             if(isSecondNumberSelected)
                 isSecondNumberSelected = false
             else

@@ -33,12 +33,10 @@ class ScientificCalculator : AppCompatActivity() {
     private var cleanerCounter = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("ScientificCalculator", "onCreate called")
-        try {
-            setContentView(R.layout.activity_scientific_calculator)
-        } catch (e: Exception) {
-            Log.e("ScientificCalculator", "Exception in onCreate", e)
-        }
+        enableEdgeToEdge()
+
+        val layoutId = intent.getIntExtra("layout", R.layout.activity_scientific_calculator)
+        setContentView(layoutId)
     }
 
     fun equalsAction(view: View) {
@@ -79,18 +77,19 @@ class ScientificCalculator : AppCompatActivity() {
                     output = firstNumber / secondNumber
                 }
                 "log" -> output = log(firstNumber, secondNumber)
-                "x^y" -> output = pow(firstNumber, secondNumber)
+                "x^y" -> output = firstNumber.pow(secondNumber)
                 else -> return
             }
             findViewById<TextView>(R.id.outputView).text = output.toString()
-//            isAnyNumber = false
             clearLine = true
-            isNumberMinus = false
+            isNumberMinus = if(output < 0) true else false
             isSecondNumberSelected = false
-        } else {
-            Toast.makeText(this, "Insert second number", Toast.LENGTH_SHORT).show()
+            isFirstNumberSelected = if(view is Button) !view.text.equals("=") else false
         }
     }
+//        else {
+//            Toast.makeText(this, "Insert second number", Toast.LENGTH_SHORT).show()
+//        }
 
     fun insertNumberAction(view: View) {
         if (view is Button)
@@ -138,10 +137,21 @@ class ScientificCalculator : AppCompatActivity() {
             findViewById<TextView>(R.id.outputView).text = ""
             if(isSecondNumberSelected)
                 isSecondNumberSelected = false
+            else
+                isFirstNumberSelected = false
+            isAnyNumber = false
+            cleanerCounter++
         }
-        isAnyNumber = false
-        isNumberMinus = false
-        isFirstNumberSelected = false
+        else
+        {
+            findViewById<TextView>(R.id.outputView).text = ""
+            isFirstNumberSelected = false
+            isSecondNumberSelected = false
+            isAnyNumber = false
+            isNumberMinus = false
+            cleanerCounter = 0
+        }
+        clearLine = false
     }
     fun changeNumberSymbol(view: View) {
         val textToEdit = findViewById<TextView>(R.id.outputView).text

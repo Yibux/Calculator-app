@@ -66,15 +66,11 @@ class ScientificCalculator : AppCompatActivity() {
     }
 
     fun equalsAction(view: View) {
-        //TODO: zweryfikowac czemu nie dziala 369 * 3 - 2 bo zamiast mnozyc to odejmuje
         val outputView = findViewById<TextView>(R.id.outputView)
         if (outputView.text.isEmpty()) {
             Toast.makeText(this, "Illegal operation", Toast.LENGTH_SHORT).show()
             return
         }
-
-//        if(calculateScientificActions(takenOperation))
-//            return
 
         if(isFirstNumberSelected && isAnyNumber && !clearLine) {
             val numberString = findViewById<TextView>(R.id.outputView).text.toString()

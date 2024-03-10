@@ -29,5 +29,9 @@ class MainActivity : ComponentActivity() {
         aboutButton.setOnClickListener {
             startActivity(Intent(this, About::class.java))
         }
+
+        findViewById<Button>(R.id.QuitButton).setOnClickListener {
+            finish()
+        }
     }
 }

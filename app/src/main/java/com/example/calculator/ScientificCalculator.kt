@@ -119,6 +119,7 @@ class ScientificCalculator : AppCompatActivity() {
                 findViewById<TextView>(R.id.outputView).text = ""
                 isAnyNumber = false
                 clearLine = false
+                cleanerCounter = 0
                 findViewById<Button>(R.id.clearButton).text = "AC"
             }
 
@@ -129,6 +130,9 @@ class ScientificCalculator : AppCompatActivity() {
             if(view.text.equals(".") &&
                 findViewById<TextView>(R.id.outputView).text.count { it == '.' } == 1)
                 return
+            //TODO: mozna wpisywac 012 a tak nie mozna
+            if(view.text.equals("0") && !view.text.equals("."))
+                findViewById<TextView>(R.id.outputView).text = ""
 
             findViewById<TextView>(R.id.outputView).append(view.text)
             isAnyNumber = true
@@ -141,6 +145,7 @@ class ScientificCalculator : AppCompatActivity() {
         val textLength = textToEdit.length
         if (textToEdit.isNotBlank()) {
             if(isNumberMinus && textLength == 2) {
+                cleanerCounter = 0
                 clearAllOperations(view)
                 return
             }
@@ -155,14 +160,14 @@ class ScientificCalculator : AppCompatActivity() {
 
     fun clearAllOperations(view: View) {
         if (cleanerCounter == 0) {
-            findViewById<Button>(R.id.clearButton).text = "AC"
             cleanerCounter++
         } else {
-            findViewById<Button>(R.id.clearButton).text = "C"
             isFirstNumberSelected = false
             isSecondNumberSelected = false
             cleanerCounter = 0
+            takenOperation = ""
         }
+        findViewById<Button>(R.id.clearButton).text = "AC"
         findViewById<TextView>(R.id.outputView).text = ""
         isNumberMinus = false
         isAnyNumber = false

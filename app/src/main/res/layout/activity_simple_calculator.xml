@@ -22,7 +22,7 @@
         <Button
             style="@style/functionalButton"
             android:onClick="clearAllOperations"
-            android:text="C" />
+            android:id="@+id/clearButton" />
 
         <Button
             style="@style/functionalButton"

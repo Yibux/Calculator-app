@@ -1,16 +1,11 @@
 package com.example.calculator
-
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import java.lang.Math.pow
 import kotlin.math.cos
 import kotlin.math.ln
 import kotlin.math.log
@@ -37,10 +32,10 @@ class ScientificCalculator : AppCompatActivity() {
 
         val layoutId = intent.getIntExtra("layout", R.layout.activity_scientific_calculator)
         setContentView(layoutId)
+        findViewById<Button>(R.id.clearButton).text = "AC"
     }
 
     fun equalsAction(view: View) {
-
         val outputView = findViewById<TextView>(R.id.outputView)
         if (outputView.text.isEmpty()) {
             Toast.makeText(this, "Illegal operation", Toast.LENGTH_SHORT).show()
@@ -61,7 +56,6 @@ class ScientificCalculator : AppCompatActivity() {
             isSecondNumberSelected = true
         }
 
-
         if(isFirstNumberSelected && isSecondNumberSelected) {
             when(takenOperation) {
                 "+" -> output = firstNumber + secondNumber
@@ -80,16 +74,16 @@ class ScientificCalculator : AppCompatActivity() {
                 "x^y" -> output = firstNumber.pow(secondNumber)
                 else -> return
             }
-            findViewById<TextView>(R.id.outputView).text = output.toString()
+
+            findViewById<TextView>(R.id.outputView).text = if (output % 1 == 0.0) String.format("%.0f", output) else String.format("%.4f", output)
+
             clearLine = true
             isNumberMinus = if(output < 0) true else false
             isSecondNumberSelected = false
             isFirstNumberSelected = if(view is Button) !view.text.equals("=") else false
         }
     }
-//        else {
-//            Toast.makeText(this, "Insert second number", Toast.LENGTH_SHORT).show()
-//        }
+
 
     fun insertNumberAction(view: View) {
         if (view is Button)
@@ -98,6 +92,7 @@ class ScientificCalculator : AppCompatActivity() {
                 findViewById<TextView>(R.id.outputView).text = ""
                 isAnyNumber = false
                 clearLine = false
+                findViewById<Button>(R.id.clearButton).text = "AC"
             }
 
             if (view.text.equals(".") && findViewById<TextView>(R.id.outputView).text.isEmpty()) {
@@ -110,6 +105,7 @@ class ScientificCalculator : AppCompatActivity() {
 
             findViewById<TextView>(R.id.outputView).append(view.text)
             isAnyNumber = true
+            findViewById<Button>(R.id.clearButton).text = "C"
         }
     }
 
@@ -127,31 +123,22 @@ class ScientificCalculator : AppCompatActivity() {
         }
 
         if (textLength == 0)
-            isAnyNumber = false
+            clearAllOperations(view)
     }
 
-    //TODO: pierwsze klikniecie C czysci tylko wpisaną liczbę, podwójne wszystko
     fun clearAllOperations(view: View) {
-        if (cleanerCounter == 0)
-        {
-            findViewById<TextView>(R.id.outputView).text = ""
-            //todo: check if it's necessary, fix this issue - after clicking C, the first number is erased (but shouldnt)
-            if(isSecondNumberSelected)
-                isSecondNumberSelected = false
-            else
-                isFirstNumberSelected = false
-            isAnyNumber = false
+        if (cleanerCounter == 0) {
+            findViewById<Button>(R.id.clearButton).text = "AC"
             cleanerCounter++
-        }
-        else
-        {
-            findViewById<TextView>(R.id.outputView).text = ""
+        } else {
+            findViewById<Button>(R.id.clearButton).text = "C"
             isFirstNumberSelected = false
             isSecondNumberSelected = false
-            isAnyNumber = false
-            isNumberMinus = false
             cleanerCounter = 0
         }
+        findViewById<TextView>(R.id.outputView).text = ""
+        isNumberMinus = false
+        isAnyNumber = false
         clearLine = false
     }
     fun changeNumberSymbol(view: View) {
@@ -173,6 +160,7 @@ class ScientificCalculator : AppCompatActivity() {
         if (view is Button && isAnyNumber) {
 
             takenOperation = view.text.toString()
+
             equalsAction(view)
 
             val numberString = findViewById<TextView>(R.id.outputView).text.toString()
@@ -182,8 +170,8 @@ class ScientificCalculator : AppCompatActivity() {
             else
                 extractNumberFromString(numberString)
 
-            isFirstNumberSelected = true
             clearLine = true
+            isFirstNumberSelected = true
         }
     }
 
@@ -194,6 +182,7 @@ class ScientificCalculator : AppCompatActivity() {
             "tan" -> output = tan(extractNumberFromString(findViewById<TextView>(R.id.outputView).text.toString()))
             "ln" -> output = ln(extractNumberFromString(findViewById<TextView>(R.id.outputView).text.toString()))
             "sqrt" -> output = sqrt(extractNumberFromString(findViewById<TextView>(R.id.outputView).text.toString()))
+            "%" -> output = extractNumberFromString(findViewById<TextView>(R.id.outputView).text.toString()) / 100
             "x^2" -> output =
                 extractNumberFromString(findViewById<TextView>(R.id.outputView).text.toString()).pow(
                     2

@@ -12,11 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Calculator"
         tools:targetApi="31">
-        <activity android:name=".ScientificCalculator"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
         <activity
-            android:name=".SimpleCalculator"
-            android:exported="false" />
+            android:name=".About" />
+        <activity
+            android:name=".ScientificCalculator"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

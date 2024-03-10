@@ -11,15 +11,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        val simpleCalculatorButton = findViewById<Button>(R.id.SimpleCalculatorButton)
-//        simpleCalculatorButton.setOnClickListener {
-//            startActivity(Intent(this, SimpleCalculator::class.java))
-//        }
-//
-//        val advancedCalculatorButton = findViewById<Button>(R.id.AdvancedCalculatorButton)
-//        advancedCalculatorButton.setOnClickListener {
-//            startActivity(Intent(this, ScientificCalculator::class.java))
-//        }
         val simpleCalculatorButton = findViewById<Button>(R.id.SimpleCalculatorButton)
         val advancedCalculatorButton = findViewById<Button>(R.id.AdvancedCalculatorButton)
 
@@ -34,6 +25,9 @@ class MainActivity : ComponentActivity() {
 
         simpleCalculatorButton.setOnClickListener(clickListener)
         advancedCalculatorButton.setOnClickListener(clickListener)
-
+        val aboutButton = findViewById<Button>(R.id.AboutButton)
+        aboutButton.setOnClickListener {
+            startActivity(Intent(this, About::class.java))
+        }
     }
 }

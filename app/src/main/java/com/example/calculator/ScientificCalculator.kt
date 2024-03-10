@@ -33,19 +33,50 @@ class ScientificCalculator : AppCompatActivity() {
         val layoutId = intent.getIntExtra("layout", R.layout.activity_scientific_calculator)
         setContentView(layoutId)
         findViewById<Button>(R.id.clearButton).text = "AC"
+
+        if(savedInstanceState != null) {
+            findViewById<TextView>(R.id.outputView).text = savedInstanceState.getString("outputViewText")
+            this.clearLine = savedInstanceState.getBoolean("clearLine")
+            this.isNumberMinus = savedInstanceState.getBoolean("isNumberMinus")
+            this.isAnyNumber = savedInstanceState.getBoolean("isAnyNumber")
+            this.takenOperation = savedInstanceState.getString("takenOperation").toString()
+            this.isFirstNumberSelected = savedInstanceState.getBoolean("isFirstNumberSelected")
+            this.isSecondNumberSelected = savedInstanceState.getBoolean("isSecondNumberSelected")
+            this.firstNumber = savedInstanceState.getDouble("firstNumber")
+            this.secondNumber = savedInstanceState.getDouble("secondNumber")
+            this.output = savedInstanceState.getDouble("output")
+            this.cleanerCounter = savedInstanceState.getInt("cleanerCounter")
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val outputViewText = findViewById<TextView>(R.id.outputView).text.toString()
+        outState.putString("outputViewText", outputViewText)
+        outState.putBoolean("clearLine", clearLine)
+        outState.putBoolean("isNumberMinus", isNumberMinus)
+        outState.putBoolean("isAnyNumber", isAnyNumber)
+        outState.putString("takenOperation", takenOperation)
+        outState.putBoolean("isFirstNumberSelected", isFirstNumberSelected)
+        outState.putBoolean("isSecondNumberSelected", isSecondNumberSelected)
+        outState.putDouble("firstNumber", firstNumber)
+        outState.putDouble("secondNumber", secondNumber)
+        outState.putDouble("output", output)
+        outState.putInt("cleanerCounter", cleanerCounter)
     }
 
     fun equalsAction(view: View) {
+        //TODO: zweryfikowac czemu nie dziala 369 * 3 - 2 bo zamiast mnozyc to odejmuje
         val outputView = findViewById<TextView>(R.id.outputView)
         if (outputView.text.isEmpty()) {
             Toast.makeText(this, "Illegal operation", Toast.LENGTH_SHORT).show()
             return
         }
 
-        if(calculateScientificActions(takenOperation))
-            return
+//        if(calculateScientificActions(takenOperation))
+//            return
 
-        if(isAnyNumber && !clearLine) {
+        if(isFirstNumberSelected && isAnyNumber && !clearLine) {
             val numberString = findViewById<TextView>(R.id.outputView).text.toString()
 
             secondNumber = if(numberString.endsWith("."))
@@ -159,9 +190,11 @@ class ScientificCalculator : AppCompatActivity() {
     fun takeOperation(view: View) {
         if (view is Button && isAnyNumber) {
 
+            equalsAction(view)
+
             takenOperation = view.text.toString()
 
-            equalsAction(view)
+            calculateScientificActions(takenOperation)
 
             val numberString = findViewById<TextView>(R.id.outputView).text.toString()
 
@@ -175,7 +208,7 @@ class ScientificCalculator : AppCompatActivity() {
         }
     }
 
-    private fun calculateScientificActions(text : String) : Boolean {
+    private fun calculateScientificActions(text : String) {
         when(text) {
             "sin" -> output = sin(extractNumberFromString(findViewById<TextView>(R.id.outputView).text.toString()))
             "cos" -> output = cos(extractNumberFromString(findViewById<TextView>(R.id.outputView).text.toString()))
@@ -187,10 +220,10 @@ class ScientificCalculator : AppCompatActivity() {
                 extractNumberFromString(findViewById<TextView>(R.id.outputView).text.toString()).pow(
                     2
                 )
-            else -> return false
+            else -> return
         }
-        findViewById<TextView>(R.id.outputView).text = output.toString()
-        return true
+        findViewById<TextView>(R.id.outputView).text = if (output % 1 == 0.0) String.format("%.0f", output) else String.format("%.4f", output)
+        return
     }
 
     private fun extractNumberFromString(numberString : String) : Double {

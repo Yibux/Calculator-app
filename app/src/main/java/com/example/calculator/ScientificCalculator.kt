@@ -1,4 +1,5 @@
 package com.example.calculator
+import android.icu.text.DecimalFormat
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -102,13 +103,17 @@ class ScientificCalculator : AppCompatActivity() {
                 else -> return
             }
 
-            findViewById<TextView>(R.id.outputView).text = if (output % 1 == 0.0) String.format("%.0f", output) else String.format("%.4f", output)
+            displayOutput()
 
             clearLine = true
             isNumberMinus = if(output < 0) true else false
             isSecondNumberSelected = false
             isFirstNumberSelected = if(view is Button) !view.text.equals("=") else false
         }
+    }
+
+    private fun displayOutput() {
+        findViewById<TextView>(R.id.outputView).text = if (output % 1 == 0.0) String.format("%.0f", output) else DecimalFormat("0.###").format(output)
     }
 
 
@@ -131,8 +136,13 @@ class ScientificCalculator : AppCompatActivity() {
                 findViewById<TextView>(R.id.outputView).text.count { it == '.' } == 1)
                 return
             //TODO: mozna wpisywac 012 a tak nie mozna
-            if(view.text.equals("0") && !view.text.equals("."))
+            if(!findViewById<TextView>(R.id.outputView).text.isEmpty()
+                && extractNumberFromString(findViewById<TextView>(R.id.outputView).text.toString()) == 0.toDouble()
+                && !view.text.equals("."))
+            {
                 findViewById<TextView>(R.id.outputView).text = ""
+//                return
+            }
 
             findViewById<TextView>(R.id.outputView).append(view.text)
             isAnyNumber = true
@@ -223,7 +233,7 @@ class ScientificCalculator : AppCompatActivity() {
                 )
             else -> return
         }
-        findViewById<TextView>(R.id.outputView).text = if (output % 1 == 0.0) String.format("%.0f", output) else String.format("%.4f", output)
+        displayOutput()
         return
     }
 

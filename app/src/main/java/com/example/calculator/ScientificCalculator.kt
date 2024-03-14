@@ -135,10 +135,10 @@ class ScientificCalculator : AppCompatActivity() {
             if(view.text.equals(".") &&
                 findViewById<TextView>(R.id.outputView).text.count { it == '.' } == 1)
                 return
-            //TODO: po 0. usuwa sie tekst
             if(!findViewById<TextView>(R.id.outputView).text.isEmpty()
                 && extractNumberFromString(findViewById<TextView>(R.id.outputView).text.toString()) == 0.toDouble()
-                && !view.text.equals("."))
+                && !view.text.equals(".")
+                && findViewById<TextView>(R.id.outputView).text.count { it == '.' } == 0)
             {
                 findViewById<TextView>(R.id.outputView).text = ""
             }
@@ -150,7 +150,6 @@ class ScientificCalculator : AppCompatActivity() {
     }
 
     fun deleteLastValue(view: View) {
-        //TODO: nie usuwa się minus jak się liczbe usunie
         val textToEdit = findViewById<TextView>(R.id.outputView).text
         val textLength = textToEdit.length
         if (textToEdit.isNotBlank()) {

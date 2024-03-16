@@ -16,7 +16,8 @@
             android:name=".About" />
         <activity
             android:name=".ScientificCalculator"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            />
         <activity
             android:name=".MainActivity"
             android:exported="true"

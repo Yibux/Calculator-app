@@ -2,6 +2,7 @@ package com.example.calculator
 import android.icu.text.DecimalFormat
 import android.os.Bundle
 import android.view.View
+import android.view.Window
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -94,6 +95,8 @@ class ScientificCalculator : AppCompatActivity() {
                         findViewById<TextView>(R.id.outputView).text = "Error"
                         isFirstNumberSelected = false
                         isSecondNumberSelected = false
+                        clearLine = true
+                        isNumberMinus = false
                         return
                     }
                     output = firstNumber / secondNumber
@@ -140,7 +143,7 @@ class ScientificCalculator : AppCompatActivity() {
                 && !view.text.equals(".")
                 && findViewById<TextView>(R.id.outputView).text.count { it == '.' } == 0)
             {
-                findViewById<TextView>(R.id.outputView).text = ""
+                findViewById<TextView>(R.id.outputView).setText("")
             }
 
             findViewById<TextView>(R.id.outputView).append(view.text)
@@ -193,6 +196,7 @@ class ScientificCalculator : AppCompatActivity() {
             else {
                 findViewById<TextView>(R.id.outputView).text = "-$textToEdit"
                 isNumberMinus = true
+
             }
         }
     }

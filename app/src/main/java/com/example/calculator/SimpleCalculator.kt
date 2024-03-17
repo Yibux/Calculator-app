@@ -1,23 +1,19 @@
 package com.example.calculator
+
 import android.icu.text.DecimalFormat
 import android.os.Bundle
 import android.view.View
-import android.view.Window
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import kotlin.math.cos
-import kotlin.math.ln
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import kotlin.math.log
 import kotlin.math.pow
-import kotlin.math.sin
-import kotlin.math.sqrt
-import kotlin.math.tan
 
-class ScientificCalculator : AppCompatActivity() {
-
+class SimpleCalculator : AppCompatActivity() {
     private var clearLine = false
     private var isNumberMinus = false
     private var isAnyNumber = false
@@ -33,9 +29,7 @@ class ScientificCalculator : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-        val layoutId = intent.getIntExtra("layout", R.layout.activity_scientific_calculator)
-        setContentView(layoutId)
+        setContentView(R.layout.activity_simple_calculator)
         findViewById<Button>(R.id.clearButton).text = "AC"
 
         outputText = findViewById<TextView>(R.id.outputView)
@@ -212,8 +206,6 @@ class ScientificCalculator : AppCompatActivity() {
 
             takenOperation = view.text.toString()
 
-            calculateScientificActions(takenOperation)
-
             val numberString = outputText.text.toString()
 
             firstNumber = if(numberString.endsWith("."))
@@ -224,24 +216,6 @@ class ScientificCalculator : AppCompatActivity() {
             clearLine = true
             isFirstNumberSelected = true
         }
-    }
-
-    private fun calculateScientificActions(text : String) {
-        when(text) {
-            "sin" -> output = sin(extractNumberFromString(outputText.text.toString()))
-            "cos" -> output = cos(extractNumberFromString(outputText.text.toString()))
-            "tan" -> output = tan(extractNumberFromString(outputText.text.toString()))
-            "ln" -> output = ln(extractNumberFromString(outputText.text.toString()))
-            "sqrt" -> output = sqrt(extractNumberFromString(outputText.text.toString()))
-            "%" -> output = extractNumberFromString(outputText.text.toString()) / 100
-            "x^2" -> output =
-                extractNumberFromString(outputText.text.toString()).pow(
-                    2
-                )
-            else -> return
-        }
-        isNumberMinus = if(output < 0) true else false
-        displayOutput()
     }
 
     private fun extractNumberFromString(numberString : String) : Double {

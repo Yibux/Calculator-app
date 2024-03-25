@@ -13,19 +13,20 @@ import androidx.core.view.WindowInsetsCompat
 import kotlin.math.log
 import kotlin.math.pow
 
-class SimpleCalculator : AppCompatActivity() {
-    private var clearLine = false
-    private var isNumberMinus = false
-    private var isAnyNumber = false
-    private var takenOperation = ""
-    private var isFirstNumberSelected = false
-    private var isSecondNumberSelected = false
-    private var firstNumber : Double = 0.0
-    private var secondNumber : Double = 0.0
-    private var output : Double = 0.0
-    private var cleanerCounter = 0
-    private lateinit var outputText : TextView
-    private lateinit var clearButton: Button
+open class SimpleCalculator : AppCompatActivity() {
+    protected var clearLine = false
+    protected var isNumberMinus = false
+    protected var isAnyNumber = false
+    protected var takenOperation = ""
+    protected var isFirstNumberSelected = false
+    protected var isSecondNumberSelected = false
+    protected var firstNumber : Double = 0.0
+    protected var secondNumber : Double = 0.0
+    protected var output : Double = 0.0
+    protected var cleanerCounter = 0
+    protected lateinit var outputText : TextView
+    protected lateinit var clearButton: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -66,7 +67,7 @@ class SimpleCalculator : AppCompatActivity() {
         outState.putInt("cleanerCounter", cleanerCounter)
     }
 
-    fun equalsAction(view: View) {
+    open fun equalsAction(view: View) {
         if (outputText.text.isEmpty()) {
             Toast.makeText(this, "Illegal operation", Toast.LENGTH_SHORT).show()
             return
@@ -99,8 +100,6 @@ class SimpleCalculator : AppCompatActivity() {
                     }
                     output = firstNumber / secondNumber
                 }
-                "log" -> output = log(firstNumber, secondNumber)
-                "x^y" -> output = firstNumber.pow(secondNumber)
                 else -> return
             }
 
@@ -113,12 +112,12 @@ class SimpleCalculator : AppCompatActivity() {
         }
     }
 
-    private fun displayOutput() {
+    protected fun displayOutput() {
         outputText.text = if (output % 1 == 0.0) String.format("%.0f", output) else DecimalFormat("0.###").format(output)
     }
 
 
-    fun insertNumberAction(view: View) {
+    open fun insertNumberAction(view: View) {
         if (view is Button)
         {
             if(clearLine) {
@@ -136,7 +135,7 @@ class SimpleCalculator : AppCompatActivity() {
             if(view.text.equals(".") &&
                 outputText.text.count { it == '.' } == 1)
                 return
-            if(!outputText.text.isEmpty()
+            if(outputText.text.isNotEmpty()
                 && extractNumberFromString(outputText.text.toString()) == 0.toDouble()
                 && !view.text.equals(".")
                 && outputText.text.count { it == '.' } == 0)
@@ -150,7 +149,7 @@ class SimpleCalculator : AppCompatActivity() {
         }
     }
 
-    fun deleteLastValue(view: View) {
+    open fun deleteLastValue(view: View) {
         val textToEdit = outputText.text
         val textLength = textToEdit.length
         if (textToEdit.isNotBlank()) {
@@ -168,7 +167,7 @@ class SimpleCalculator : AppCompatActivity() {
             clearAllOperations(view)
     }
 
-    fun clearAllOperations(view: View) {
+    open fun clearAllOperations(view: View) {
         if (cleanerCounter == 0) {
             cleanerCounter++
         } else {
@@ -183,7 +182,7 @@ class SimpleCalculator : AppCompatActivity() {
         isAnyNumber = false
         clearLine = false
     }
-    fun changeNumberSymbol(view: View) {
+    open fun changeNumberSymbol(view: View) {
         val textToEdit = outputText.text
         val textLength = textToEdit.length
         if(isAnyNumber) {
@@ -199,7 +198,7 @@ class SimpleCalculator : AppCompatActivity() {
         }
     }
 
-    fun takeOperation(view: View) {
+    open fun takeOperation(view: View) {
         if (view is Button && isAnyNumber) {
 
             equalsAction(view)
@@ -218,7 +217,7 @@ class SimpleCalculator : AppCompatActivity() {
         }
     }
 
-    private fun extractNumberFromString(numberString : String) : Double {
+    protected fun extractNumberFromString(numberString : String) : Double {
         isNumberMinus = false
         return if (numberString.startsWith("-")) {
             numberString.substring(1).toDouble() * (-1)

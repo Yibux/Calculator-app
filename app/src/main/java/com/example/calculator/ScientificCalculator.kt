@@ -16,20 +16,20 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 import kotlin.math.tan
 
-class ScientificCalculator : AppCompatActivity() {
+class ScientificCalculator : SimpleCalculator() {
 
-    private var clearLine = false
-    private var isNumberMinus = false
-    private var isAnyNumber = false
-    private var takenOperation = ""
-    private var isFirstNumberSelected = false
-    private var isSecondNumberSelected = false
-    private var firstNumber : Double = 0.0
-    private var secondNumber : Double = 0.0
-    private var output : Double = 0.0
-    private var cleanerCounter = 0
-    private lateinit var outputText : TextView
-    private lateinit var clearButton: Button
+//    private var clearLine = false
+//    private var isNumberMinus = false
+//    private var isAnyNumber = false
+//    private var takenOperation = ""
+//    private var isFirstNumberSelected = false
+//    private var isSecondNumberSelected = false
+//    private var firstNumber : Double = 0.0
+//    private var secondNumber : Double = 0.0
+//    private var output : Double = 0.0
+//    private var cleanerCounter = 0
+//    private lateinit var outputText : TextView
+//    private lateinit var clearButton: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -72,7 +72,7 @@ class ScientificCalculator : AppCompatActivity() {
         outState.putInt("cleanerCounter", cleanerCounter)
     }
 
-    fun equalsAction(view: View) {
+    override fun equalsAction(view: View) {
         if (outputText.text.isEmpty()) {
             Toast.makeText(this, "Illegal operation", Toast.LENGTH_SHORT).show()
             return
@@ -119,12 +119,7 @@ class ScientificCalculator : AppCompatActivity() {
         }
     }
 
-    private fun displayOutput() {
-        outputText.text = if (output % 1 == 0.0) String.format("%.0f", output) else DecimalFormat("0.###").format(output)
-    }
-
-
-    fun insertNumberAction(view: View) {
+    override fun insertNumberAction(view: View) {
         if (view is Button)
         {
             if(clearLine) {
@@ -156,7 +151,7 @@ class ScientificCalculator : AppCompatActivity() {
         }
     }
 
-    fun deleteLastValue(view: View) {
+    override fun deleteLastValue(view: View) {
         val textToEdit = outputText.text
         val textLength = textToEdit.length
         if (textToEdit.isNotBlank()) {
@@ -174,7 +169,7 @@ class ScientificCalculator : AppCompatActivity() {
             clearAllOperations(view)
     }
 
-    fun clearAllOperations(view: View) {
+    override fun clearAllOperations(view: View) {
         if (cleanerCounter == 0) {
             cleanerCounter++
         } else {
@@ -189,7 +184,8 @@ class ScientificCalculator : AppCompatActivity() {
         isAnyNumber = false
         clearLine = false
     }
-    fun changeNumberSymbol(view: View) {
+
+    override fun changeNumberSymbol(view: View) {
         val textToEdit = outputText.text
         val textLength = textToEdit.length
         if(isAnyNumber) {
@@ -205,7 +201,7 @@ class ScientificCalculator : AppCompatActivity() {
         }
     }
 
-    fun takeOperation(view: View) {
+    override fun takeOperation(view: View) {
         if (view is Button && isAnyNumber) {
 
             equalsAction(view)
@@ -244,12 +240,4 @@ class ScientificCalculator : AppCompatActivity() {
         displayOutput()
     }
 
-    private fun extractNumberFromString(numberString : String) : Double {
-        isNumberMinus = false
-        return if (numberString.startsWith("-")) {
-            numberString.substring(1).toDouble() * (-1)
-        } else {
-            numberString.toDouble()
-        }
-    }
 }

@@ -1,41 +1,36 @@
 package com.example.calculator
+
 import android.icu.text.DecimalFormat
 import android.os.Bundle
 import android.view.View
-import android.view.Window
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import kotlin.math.cos
-import kotlin.math.ln
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import kotlin.math.log
 import kotlin.math.pow
-import kotlin.math.sin
-import kotlin.math.sqrt
-import kotlin.math.tan
 
-class ScientificCalculator : SimpleCalculator() {
+open class SimpleCalculator : AppCompatActivity() {
+    protected var clearLine = false
+    protected var isNumberMinus = false
+    protected var isAnyNumber = false
+    protected var takenOperation = ""
+    protected var isFirstNumberSelected = false
+    protected var isSecondNumberSelected = false
+    protected var firstNumber : Double = 0.0
+    protected var secondNumber : Double = 0.0
+    protected var output : Double = 0.0
+    protected var cleanerCounter = 0
+    protected lateinit var outputText : TextView
+    protected lateinit var clearButton: Button
 
-//    private var clearLine = false
-//    private var isNumberMinus = false
-//    private var isAnyNumber = false
-//    private var takenOperation = ""
-//    private var isFirstNumberSelected = false
-//    private var isSecondNumberSelected = false
-//    private var firstNumber : Double = 0.0
-//    private var secondNumber : Double = 0.0
-//    private var output : Double = 0.0
-//    private var cleanerCounter = 0
-//    private lateinit var outputText : TextView
-//    private lateinit var clearButton: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-        val layoutId = intent.getIntExtra("layout", R.layout.activity_scientific_calculator)
-        setContentView(layoutId)
+        setContentView(R.layout.activity_simple_calculator)
         findViewById<Button>(R.id.clearButton).text = "AC"
 
         outputText = findViewById<TextView>(R.id.outputView)
@@ -72,7 +67,7 @@ class ScientificCalculator : SimpleCalculator() {
         outState.putInt("cleanerCounter", cleanerCounter)
     }
 
-    override fun equalsAction(view: View) {
+    open fun equalsAction(view: View) {
         if (outputText.text.isEmpty()) {
             Toast.makeText(this, "Illegal operation", Toast.LENGTH_SHORT).show()
             return
@@ -105,8 +100,6 @@ class ScientificCalculator : SimpleCalculator() {
                     }
                     output = firstNumber / secondNumber
                 }
-                "log" -> output = log(firstNumber, secondNumber)
-                "x^y" -> output = firstNumber.pow(secondNumber)
                 else -> return
             }
 
@@ -119,7 +112,12 @@ class ScientificCalculator : SimpleCalculator() {
         }
     }
 
-    override fun insertNumberAction(view: View) {
+    protected fun displayOutput() {
+        outputText.text = if (output % 1 == 0.0) String.format("%.0f", output) else DecimalFormat("0.###").format(output)
+    }
+
+
+    open fun insertNumberAction(view: View) {
         if (view is Button)
         {
             if(clearLine) {
@@ -137,7 +135,7 @@ class ScientificCalculator : SimpleCalculator() {
             if(view.text.equals(".") &&
                 outputText.text.count { it == '.' } == 1)
                 return
-            if(!outputText.text.isEmpty()
+            if(outputText.text.isNotEmpty()
                 && extractNumberFromString(outputText.text.toString()) == 0.toDouble()
                 && !view.text.equals(".")
                 && outputText.text.count { it == '.' } == 0)
@@ -151,7 +149,7 @@ class ScientificCalculator : SimpleCalculator() {
         }
     }
 
-    override fun deleteLastValue(view: View) {
+    open fun deleteLastValue(view: View) {
         val textToEdit = outputText.text
         val textLength = textToEdit.length
         if (textToEdit.isNotBlank()) {
@@ -169,7 +167,7 @@ class ScientificCalculator : SimpleCalculator() {
             clearAllOperations(view)
     }
 
-    override fun clearAllOperations(view: View) {
+    open fun clearAllOperations(view: View) {
         if (cleanerCounter == 0) {
             cleanerCounter++
         } else {
@@ -184,8 +182,7 @@ class ScientificCalculator : SimpleCalculator() {
         isAnyNumber = false
         clearLine = false
     }
-
-    override fun changeNumberSymbol(view: View) {
+    open fun changeNumberSymbol(view: View) {
         val textToEdit = outputText.text
         val textLength = textToEdit.length
         if(isAnyNumber) {
@@ -201,14 +198,12 @@ class ScientificCalculator : SimpleCalculator() {
         }
     }
 
-    override fun takeOperation(view: View) {
+    open fun takeOperation(view: View) {
         if (view is Button && isAnyNumber) {
 
             equalsAction(view)
 
             takenOperation = view.text.toString()
-
-            calculateScientificActions(takenOperation)
 
             val numberString = outputText.text.toString()
 
@@ -222,22 +217,12 @@ class ScientificCalculator : SimpleCalculator() {
         }
     }
 
-    private fun calculateScientificActions(text : String) {
-        when(text) {
-            "sin" -> output = sin(extractNumberFromString(outputText.text.toString()))
-            "cos" -> output = cos(extractNumberFromString(outputText.text.toString()))
-            "tan" -> output = tan(extractNumberFromString(outputText.text.toString()))
-            "ln" -> output = ln(extractNumberFromString(outputText.text.toString()))
-            "sqrt" -> output = sqrt(extractNumberFromString(outputText.text.toString()))
-            "%" -> output = extractNumberFromString(outputText.text.toString()) / 100
-            "x^2" -> output =
-                extractNumberFromString(outputText.text.toString()).pow(
-                    2
-                )
-            else -> return
+    protected fun extractNumberFromString(numberString : String) : Double {
+        isNumberMinus = false
+        return if (numberString.startsWith("-")) {
+            numberString.substring(1).toDouble() * (-1)
+        } else {
+            numberString.toDouble()
         }
-        isNumberMinus = if(output < 0) true else false
-        displayOutput()
     }
-
 }
